@@ -11,6 +11,7 @@ public class MainTurnos {
         Scanner scanner = new Scanner(System.in);
         SucursalBanco sucursal = SucursalBanco.getInstance("Banco Principal");
         GestorTurnos gestor = sucursal.getGestorTurnos();
+        DiccionarioSimplePU diccionario = new DiccionarioSimplePU();
 
         while (true) {
             System.out.println("\n--- SISTEMA DE TURNOS BANCARIOS ---");
@@ -36,6 +37,7 @@ public class MainTurnos {
                     String tramite = scanner.nextLine();
                     System.out.println("Fecha y Hora: " + fechaHora);
                     Turno nuevoTurno = gestor.asignarTurno(dni, nombre, tramite, fechaHora);
+                    diccionario.Agregar(nuevoTurno.getId(),nuevoTurno);
                     
                     System.out.println("Turno asignado: " + nuevoTurno);
                     break;
