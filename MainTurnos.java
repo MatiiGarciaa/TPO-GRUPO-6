@@ -12,6 +12,7 @@ public class MainTurnos {
         SucursalBanco sucursal = SucursalBanco.getInstance("Banco Principal");
         GestorTurnos gestor = sucursal.getGestorTurnos();
         DiccionarioSimplePU diccionario = new DiccionarioSimplePU();
+        diccionario.InicializarDiccionario();
 
         while (true) {
             System.out.println("\n--- SISTEMA DE TURNOS BANCARIOS ---");
@@ -38,7 +39,7 @@ public class MainTurnos {
                     System.out.println("Fecha y Hora: " + fechaHora);
                     Turno nuevoTurno = gestor.asignarTurno(dni, nombre, tramite, fechaHora);
                     diccionario.Agregar(nuevoTurno.getId(),nuevoTurno);
-                    
+                    diccionario.ImprimirDiccionario();
                     System.out.println("Turno asignado: " + nuevoTurno);
                     break;
                     
@@ -68,6 +69,7 @@ public class MainTurnos {
                     break;
                     
                 case 5:
+                	/*
                     System.out.print("Ingrese DNI a buscar: ");
                     int dniBuscar = scanner.nextInt();
                     scanner.nextLine();
@@ -75,7 +77,7 @@ public class MainTurnos {
                         System.out.println("Turno encontrado: " + encontrado);
                     } else {
                         System.out.println("No se encontró turno para ese DNI");
-                    }
+                    }*/
                     break;
                     
                 case 0:
