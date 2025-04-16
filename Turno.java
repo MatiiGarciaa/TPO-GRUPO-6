@@ -2,67 +2,47 @@ package TPO;
 
 public class Turno {
     private final int dni;
-    private final String nombre;
+    private final String nombreCliente;
     private final String tramite;
     private final int prioridad;
+    private final String fechaHoraLlegada;
+    private boolean atendido;
 
-    public Turno(int dni, String nombre, String tramite) {
+    public Turno(int dni, String nombreCliente, String tramite, String fechaHoraLlegada) {
         this.dni = dni;
-        this.nombre = nombre;
+        this.nombreCliente = nombreCliente;
         this.tramite = tramite;
         this.prioridad = calcularPrioridad(tramite);
+        this.fechaHoraLlegada = fechaHoraLlegada;
+        this.atendido = false;
     }
 
     private int calcularPrioridad(String tramite) {
         tramite = tramite.toLowerCase();
-        if (tramite.equals("apertura de cuenta")) {
-            return 3;
+        if (tramite.contains("apertura de cuenta")) {
+            return 1; // Mayor prioridad
         }
-        if (tramite.equals("pago de servicios")){
-            return 2;
-        } 
-        return 1;
+        if (tramite.contains("pago de servicios")) {
+            return 3; // Menor prioridad
+        }
+        return 2; // Prioridad media
     }
 
-    // Getter y Setter para DNI
-    public int getDni() {
-        return this.dni;
-    }
+    // Getters
+    public int getDni() { return dni; }
+    public String getNombreCliente() { return nombreCliente; }
+    public String getTramite() { return tramite; }
+    public int getPrioridad() { return prioridad; }
+    public String getFechaHoraLlegada() { return fechaHoraLlegada; }
+    public boolean isAtendido() { return atendido; }
 
-    public void setDni(int dni) {
-        this.dni = dni;
-    }
+    // Setters
+    public void marcarComoAtendido() { this.atendido = true; }
 
-    // Getter y Setter para Nombre
-    public String getNombre() {
-        return this.nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    // Getter y Setter para Trámite
-    public String getTramite() {
-        return this.tramite;
-    }
-
-    public void setTramite(String tramite) {
-        this.tramite = tramite;
-        this.prioridad = calcularPrioridad(tramite); // recalcular si cambia
-    } 
-
-    // Getter y Setter para Prioridad
-    public int getPrioridad() {
-        return this.prioridad;
-    }
-
-    // Prioridad no se modifica directamente desde afuera (opcional)
-    private void setPrioridad(int prioridad) {
-        this.prioridad = prioridad;
-    }
-
+    @Override
     public String toString() {
-        return "[DNI: " + dni + "] " + nombre + " - " + tramite + " (P: " + prioridad + ")";
+        return String.format("[DNI: %d] %s - %s (Prioridad: %d) - %s %s",
+                dni, nombreCliente, tramite, prioridad, fechaHoraLlegada,
+                atendido ? "[ATENDIDO]" : "[PENDIENTE]");
     }
 }

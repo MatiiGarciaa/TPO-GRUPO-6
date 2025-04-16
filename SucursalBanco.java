@@ -2,32 +2,27 @@ package TPO;
 
 public class SucursalBanco {
     private static SucursalBanco instancia;
-    private FuncionTurnos funcion;
-    private DiccionarioSimpleTDA diccionario;
+    private GestorTurnos gestorTurnos;
+    private String nombreSucursal;
 
-    private SucursalBanco() {
-        funcion = new FuncionTurnos();
-        diccionario = new DiccionarioSimplePU();
-        diccionario.InicializarDiccionario();
+    private SucursalBanco(String nombreSucursal) {
+        this.nombreSucursal = nombreSucursal;
+        this.gestorTurnos = new GestorTurnos();
     }
 
-    public static SucursalBanco getInstance() {
+    public static SucursalBanco getInstance(String nombreSucursal) {
         if (instancia == null) {
-            instancia = new SucursalBanco();
+            instancia = new SucursalBanco(nombreSucursal);
         }
         return instancia;
     }
 
-    public void mostrarHistorial() {
-        Turno[] historial = funcion.obtenerHistorial();
-        if (historial.length == 0) {
-            System.out.println("📦 Historial vacío.");
-        } else {
-            for (int i = 0; i < historial.length; i++) {
-                System.out.println("  " + historial[i]);
-            }
-        }
+    public GestorTurnos getGestorTurnos() {
+        return gestorTurnos;
     }
 
-    
+    public void mostrarEstado() {
+        System.out.println("=== Sucursal: " + nombreSucursal + " ===");
+        System.out.println("Turnos pendientes: " + gestorTurnos.getCantidadTurnosPendientes());
+    }
 }
