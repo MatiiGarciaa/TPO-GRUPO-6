@@ -1,30 +1,35 @@
 package TPO;
 
 public class PilaPU implements PilaTDA {
-	Turno[] valores;
-    int tope;
+	private class Nodo {
+        Turno dato;
+        Nodo sig;
+    }
+	private Nodo tope;
 
     public void InicializarPila() {
-        valores = new Turno[100];
-        tope = 0;
+        tope = null;
     }
 
-    public void Apilar(Turno x) {
-        valores[tope] = x;
-        tope++;
+    public void Apilar(Turno turno) {
+        Nodo nuevo = new Nodo();
+        nuevo.dato = turno;
+        nuevo.sig = tope;
+        tope = nuevo;
     }
 
     public void Desapilar() {
-        if (tope > 0) {
-            tope--;
+        if (tope != null) {
+            tope = tope.sig;
         }
     }
 
-    public Turno Tope() {
-        return valores[tope - 1];
+    public boolean PilaVacia() {
+        return tope == null;
     }
 
-    public boolean PilaVacia() {
-        return (tope == 0);
+    public Turno Tope() {
+        return tope.dato;
     }
+    
 }
