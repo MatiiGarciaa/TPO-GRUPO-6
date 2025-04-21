@@ -44,34 +44,31 @@ public class GestorTurnos {
     }
 
     public Turno[] obtenerTurnosEnEspera() {
-    ColaPrioridadPU colaAux = new ColaPrioridadPU();
-    colaAux.InicializarCola();
+        ColaPrioridadPU auxiliar = new ColaPrioridadPU();
+        auxiliar.InicializarCola();
+        
+        Turno[] pendientes = new Turno[contadorTurnos];
+        int i = 0;
 
-    // 1. Primera pasada: contar y copiar
-    int cantidad = 0;
+        while (!colaPrioridad.ColaVacia()) {
+            Turno t = colaPrioridad.Primero();
+            pendientes[i++] = t;
+            auxiliar.AcolarPrioridad(t, t.getPrioridad());
+            colaPrioridad.Desacolar();
+        }
 
-    while (!colaPrioridad.ColaVacia()) {
-        Turno t = colaPrioridad.Primero();
-        colaAux.AcolarPrioridad(t, t.getPrioridad());
-        colaPrioridad.Desacolar();
-        cantidad++;
+        while (!auxiliar.ColaVacia()) {
+            Turno t = auxiliar.Primero();
+            colaPrioridad.AcolarPrioridad(t, t.getPrioridad());
+            auxiliar.Desacolar();
+        }
+
+        Turno[] resultado = new Turno[i];
+        for (int j = 0; j < i; j++) {
+            resultado[j] = pendientes[j];
+        }
+        return resultado;
     }
-
-    // 2. Crear arreglo con tamaño exacto
-    Turno[] resultado = new Turno[cantidad];
-    int i = 0;
-
-    // 3. Segunda pasada: llenar el arreglo y restaurar la cola original
-    while (!colaAux.ColaVacia()) {
-        Turno t = colaAux.Primero();
-        resultado[i++] = t;
-        colaPrioridad.AcolarPrioridad(t, t.getPrioridad());
-        colaAux.Desacolar();
-    }
-
-    return resultado;
-}
-
 
     public Turno[] obtenerHistorialAtendidos() {
         PilaPU copia = new PilaPU();
