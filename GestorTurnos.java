@@ -44,55 +44,11 @@ public class GestorTurnos {
     }
 
     public Turno[] obtenerTurnosEnEspera() {
-        ColaPrioridadPU colaAux = new ColaPrioridadPU();
-        colaAux.InicializarCola();
-
-        // 1. Primera pasada: contar y copiar
-        int cantidad = 0;
-
-        while (!colaPrioridad.ColaVacia()) {
-            Turno t = colaPrioridad.Primero();
-            colaAux.AcolarPrioridad(t, t.getPrioridad());
-            colaPrioridad.Desacolar();
-            cantidad++;
-        }
-
-        // 2. Crear arreglo con tamaño exacto
-        Turno[] resultado = new Turno[cantidad];
-        int i = 0;
-
-        // 3. Segunda pasada: llenar el arreglo y restaurar la cola original
-        while (!colaAux.ColaVacia()) {
-            Turno t = colaAux.Primero();
-            resultado[i++] = t;
-            colaPrioridad.AcolarPrioridad(t, t.getPrioridad());
-            colaAux.Desacolar();
-        }
-
-        return resultado;
+        return colaPrioridad.verElementos();
     }
 
     public Turno[] obtenerHistorialAtendidos() {
-        PilaPU copia = new PilaPU();
-        copia.InicializarPila();
-
-        int count = 0;
-        while (!historialAtendidos.PilaVacia()) {
-            Turno t = (Turno) historialAtendidos.Tope();
-            copia.Apilar(t);
-            historialAtendidos.Desapilar();
-            count++;
-        }
-
-        Turno[] historial = new Turno[count];
-        for (int i = count - 1; i >= 0; i--) {
-            Turno t = (Turno) copia.Tope();
-            historial[i] = t;
-            historialAtendidos.Apilar(t);
-            copia.Desapilar();
-        }
-
-        return historial;
+        return historialAtendidos.verElementos();
     }
 
 }
