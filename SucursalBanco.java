@@ -20,9 +20,4 @@ public class SucursalBanco {
     public GestorTurnos getGestorTurnos() {
         return gestorTurnos;
     }
-
-    public void mostrarEstado() {
-        System.out.println("=== Sucursal: " + nombreSucursal + " ===");
-        System.out.println("Turnos pendientes: " + gestorTurnos.getCantidadTurnosPendientes());
-    }
 }

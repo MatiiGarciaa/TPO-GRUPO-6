@@ -18,15 +18,15 @@ public class Turno {
     }
 
     private int calcularPrioridad(String tramite) {
-        tramite = tramite.toLowerCase();
-        if (tramite.contains("apertura de cuenta")) {
+        if (tramite.equalsIgnoreCase("apertura de cuenta")) {
             return 1; // Mayor prioridad
         }
-        if (tramite.contains("pago de servicios")) {
+        if (tramite.equalsIgnoreCase("pago de servicios")) {
             return 3; // Menor prioridad
         }
         return 2; // Prioridad media
     }
+
 
     // Getters
     public int getDni() { return dni; }

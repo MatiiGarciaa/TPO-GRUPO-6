@@ -26,7 +26,7 @@ public class GestorTurnos {
     }
     
     public Turno buscarTurnoPorDni(int dni) {
-        return (Turno) turnosPorDni.Recuperar(dni);
+        return (Turno) turnosPorDni.Recuperar(dni); /*el casting no es necesario pero por las dudas xs*/
     }
 
 
@@ -44,29 +44,31 @@ public class GestorTurnos {
     }
 
     public Turno[] obtenerTurnosEnEspera() {
-        ColaPrioridadPU auxiliar = new ColaPrioridadPU();
-        auxiliar.InicializarCola();
-        
-        Turno[] pendientes = new Turno[contadorTurnos];
-        int i = 0;
+        ColaPrioridadPU colaAux = new ColaPrioridadPU();
+        colaAux.InicializarCola();
+
+        // 1. Primera pasada: contar y copiar
+        int cantidad = 0;
 
         while (!colaPrioridad.ColaVacia()) {
             Turno t = colaPrioridad.Primero();
-            pendientes[i++] = t;
-            auxiliar.AcolarPrioridad(t, t.getPrioridad());
+            colaAux.AcolarPrioridad(t, t.getPrioridad());
             colaPrioridad.Desacolar();
+            cantidad++;
         }
 
-        while (!auxiliar.ColaVacia()) {
-            Turno t = auxiliar.Primero();
+        // 2. Crear arreglo con tamaño exacto
+        Turno[] resultado = new Turno[cantidad];
+        int i = 0;
+
+        // 3. Segunda pasada: llenar el arreglo y restaurar la cola original
+        while (!colaAux.ColaVacia()) {
+            Turno t = colaAux.Primero();
+            resultado[i++] = t;
             colaPrioridad.AcolarPrioridad(t, t.getPrioridad());
-            auxiliar.Desacolar();
+            colaAux.Desacolar();
         }
 
-        Turno[] resultado = new Turno[i];
-        for (int j = 0; j < i; j++) {
-            resultado[j] = pendientes[j];
-        }
         return resultado;
     }
 
@@ -91,27 +93,6 @@ public class GestorTurnos {
         }
 
         return historial;
-    }
-
-    public int getCantidadTurnosPendientes() {
-        ColaPrioridadPU auxiliar = new ColaPrioridadPU();
-        auxiliar.InicializarCola();
-        int cantidad = 0;
-
-        while (!colaPrioridad.ColaVacia()) {
-            Turno t = colaPrioridad.Primero();
-            auxiliar.AcolarPrioridad(t, t.getPrioridad());
-            colaPrioridad.Desacolar();
-            cantidad++;
-        }
-
-        while (!auxiliar.ColaVacia()) {
-            Turno t = auxiliar.Primero();
-            colaPrioridad.AcolarPrioridad(t, t.getPrioridad());
-            auxiliar.Desacolar();
-        }
-
-        return cantidad;
     }
 
 }
