@@ -8,11 +8,9 @@ public class MainTurnos {
     public static void main(String[] args) {
     	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     	String fechaHora = LocalDateTime.now().format(formato);
-        Scanner scanner = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         SucursalBanco sucursal = SucursalBanco.getInstance("Banco Principal");
         GestorTurnos gestor = sucursal.getGestorTurnos();
-        DiccionarioSimplePU diccionario = new DiccionarioSimplePU();
-        diccionario.InicializarDiccionario();
 
         while (true) {
             System.out.println("\n--- SISTEMA DE TURNOS BANCARIOS ---");
@@ -24,22 +22,20 @@ public class MainTurnos {
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             
-            int opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            int opcion = input.nextInt();
+            input.nextLine(); // Limpiar buffer
 
             switch (opcion) {
                 case 1:
                     System.out.print("Ingrese DNI: ");
-                    int dni = scanner.nextInt();
-                    scanner.nextLine();
+                    int dni = input.nextInt();
+                    input.nextLine();
                     System.out.print("Ingrese nombre: ");
-                    String nombre = scanner.nextLine();
+                    String nombre = input.nextLine();
                     System.out.print("Ingrese trámite: ");
-                    String tramite = scanner.nextLine();
+                    String tramite = input.nextLine();
                     System.out.println("Fecha y Hora: " + fechaHora);
                     Turno nuevoTurno = gestor.asignarTurno(dni, nombre, tramite, fechaHora);
-                    diccionario.Agregar(nuevoTurno.getId(),nuevoTurno);
-                    diccionario.ImprimirDiccionario();
                     System.out.println("Turno asignado: " + nuevoTurno);
                     break;
                     
@@ -69,16 +65,18 @@ public class MainTurnos {
                     break;
                     
                 case 5:
-                	/*
-                    System.out.print("Ingrese DNI a buscar: ");
-                    int dniBuscar = scanner.nextInt();
-                    scanner.nextLine();
-                    if (encontrado != null) {
-                        System.out.println("Turno encontrado: " + encontrado);
-                    } else {
-                        System.out.println("No se encontró turno para ese DNI");
-                    }*/
-                    break;
+                	 System.out.print("Ingrese DNI para buscar: ");
+                	    int dniBuscar = input.nextInt();
+                	    input.nextLine();
+
+                	    Turno encontrado = gestor.buscarTurnoPorDni(dniBuscar);
+
+                	    if (encontrado != null) {
+                	        System.out.println("Turno encontrado: " + encontrado);
+                	    } else {
+                	        System.out.println("No se encontró turno para ese DNI");
+                	    }
+                	    break;
                     
                 case 0:
                     System.out.println("Saliendo del sistema...");

@@ -1,15 +1,12 @@
 package TPO;
 
 public class Turno {
-    public final int dni;
-    public final String nombreCliente;
-    public final String tramite;
-    public final int prioridad;
-    public final String fechaHoraLlegada;
-    public boolean atendido;
-    private static int contadorTurnos = 1; // Genera IDs
-    private int id;
-
+    private final int dni;
+    private final String nombreCliente;
+    private final String tramite;
+    private final int prioridad;
+    private final String fechaHoraLlegada;
+    private boolean atendido;
 
     public Turno(int dni, String nombreCliente, String tramite, String fechaHoraLlegada) {
         this.dni = dni;
@@ -18,7 +15,6 @@ public class Turno {
         this.prioridad = calcularPrioridad(tramite);
         this.fechaHoraLlegada = fechaHoraLlegada;
         this.atendido = false;
-        this.id = contadorTurnos++;
     }
 
     private int calcularPrioridad(String tramite) {
@@ -39,8 +35,6 @@ public class Turno {
     public int getPrioridad() { return prioridad; }
     public String getFechaHoraLlegada() { return fechaHoraLlegada; }
     public boolean isAtendido() { return atendido; }
-    public int getId() {return id;  }
-
 
     // Setters
     public void marcarComoAtendido() { this.atendido = true; }

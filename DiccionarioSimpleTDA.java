@@ -5,5 +5,5 @@ public interface DiccionarioSimpleTDA {
     void Agregar(int clave, Turno valor); // Turno en vez de int
     void Eliminar(int clave); // pre: diccionario inicializado.
     Turno Recuperar(int clave); // Turno en vez de int
-    int[] Claves(); // pre: diccionario inicializado.
+    ConjuntoTDA Claves(); 
 }
