@@ -13,7 +13,7 @@ public class ColaPrioridadPU implements ColaPrioridadTDA {
 
     public void AcolarPrioridad(Turno x, int p) {
         int j = indice;
-        while (j > 0 && prioridades[j - 1] < p) {
+        while (j > 0 && prioridades[j - 1] <= p) {
             elementos[j] = elementos[j - 1];
             prioridades[j] = prioridades[j - 1];
             j--;
