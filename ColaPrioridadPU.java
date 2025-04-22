@@ -28,12 +28,12 @@ public class ColaPrioridadPU implements ColaPrioridadTDA {
     }
     //el indice tiene cuantos turnos se agrego osea el tamanio
     
-    public Turno [] verElementos() {
-    	Turno[] copia = new Turno[indice];
-    	for (int i = 0; i < indice; i++) {
-            copia[i] = elementos[i];
+    public Turno[] verElementos() {
+        Turno[] copia = new Turno[indice];
+        for (int i = 0; i < indice; i++) {
+            copia[i] = elementos[indice - 1 - i];
         }
-    	return copia;
+        return copia;
     }
 
 
