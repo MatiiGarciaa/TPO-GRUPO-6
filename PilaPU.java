@@ -32,33 +32,23 @@ public class PilaPU implements PilaTDA {
         return tope.dato;
     }
     
-    public int tamanio() {
-        int contador = 0;
-        Nodo actual = tope;
-        
-        while (actual != null) {
-            contador++;
-            actual = actual.sig;
-        }
-        
-        return contador;
-    }
-    
-    public Turno[] verElementos() {
-        int tamaño = tamanio();
-        Turno[] elementos = new Turno[tamaño];
+    public void Mostrar() {
+        PilaPU aux = new PilaPU();
+        aux.InicializarPila();
 
-        Nodo actual = tope;
-        int i = 0;
-        
-        while (actual != null) {
-            elementos[i++] = actual.dato;
-            actual = actual.sig;
+        while (!this.PilaVacia()) {
+            Turno t = this.Tope();
+            System.out.println(t);
+            aux.Apilar(t);
+            this.Desapilar();
         }
 
-        return elementos;
+        while (!aux.PilaVacia()) {
+            Turno t = aux.Tope();
+            this.Apilar(t);
+            aux.Desapilar();
+        }
     }
-
     
 
     
