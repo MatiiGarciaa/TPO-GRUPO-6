@@ -7,6 +7,7 @@ public class Turno {
     private final int prioridad;
     private final String fechaHoraLlegada;
     private boolean atendido;
+    private boolean finalizado;
 
     public Turno(int dni, String nombreCliente, String tramite, String fechaHoraLlegada) {
         this.dni = dni;
@@ -15,6 +16,7 @@ public class Turno {
         this.prioridad = calcularPrioridad(tramite);
         this.fechaHoraLlegada = fechaHoraLlegada;
         this.atendido = false;
+        this.setFinalizado(false);
     }
 
     private int calcularPrioridad(String tramite) {
@@ -38,11 +40,23 @@ public class Turno {
 
     // Setters
     public void marcarComoAtendido() { this.atendido = true; }
+    
+    public void marcarComoFinalizado() { this.setFinalizado(true); }
+
 
     @Override
     public String toString() {
-        return String.format("[DNI: %d] %s - %s (Prioridad: %d) - %s %s",
-                dni, nombreCliente, tramite, prioridad, fechaHoraLlegada,
-                atendido ? "[ATENDIDO]" : "[PENDIENTE]");
+        return String.format("[DNI: %d] %s - %s (Prioridad: %d) - %s %s %s",
+            dni, nombreCliente, tramite, prioridad, fechaHoraLlegada,
+            atendido ? "[ATENDIDO]" : "[PENDIENTE]",
+            finalizado ? "[FINALIZADO]" : "");
     }
+
+	public boolean isFinalizado() {
+		return finalizado;
+	}
+
+	public void setFinalizado(boolean finalizado) {
+		this.finalizado = finalizado;
+	}
 }

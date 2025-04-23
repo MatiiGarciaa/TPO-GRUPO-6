@@ -19,9 +19,10 @@ public class MainTurnos {
             System.out.println("=====================================");
             System.out.println("  1️  Asignar nuevo turno");
             System.out.println("  2️  Llamar siguiente turno");
-            System.out.println("  3️  Ver turnos en espera");
-            System.out.println("  4️  Ver historial de atendidos");
-            System.out.println("  5️  Buscar turno por DNI");
+            System.out.println("  3  Ver turnos en espera");
+            System.out.println("  4  Ver historial de atendidos");
+            System.out.println("  5  Buscar turno por DNI");
+            System.out.println("  6  Marcar como finalizado");
             System.out.println("  0️  Salir");
             System.out.println("=====================================");
             System.out.print("Seleccione una opción ▶️: ");
@@ -105,21 +106,25 @@ public class MainTurnos {
                     break;
 
                 case 5:
-                	System.out.print("🔍 Ingrese DNI para buscar: ");
+                    System.out.print("🔍 Ingrese DNI para buscar: ");
                     int dniBuscar = input.nextInt();
                     input.nextLine();
 
-                    Turno[] encontrados = gestor.buscarTurnosPorDni(dniBuscar);
+                    gestor.mostrarTurnosPorDni(dniBuscar);
+                    break;
+                case 6:
+                    System.out.print("🆔 Ingrese el ID del turno a finalizar: ");
+                    int idFinalizar = input.nextInt();
+                    input.nextLine();
 
-                    if (encontrados.length == 0) {
-                        System.out.println("❌ No se encontró ningún turno con ese DNI.");
+                    boolean finalizado = gestor.marcarTurnoComoFinalizado(idFinalizar);
+                    if (finalizado) {
+                        System.out.println("✅ Turno marcado como FINALIZADO.");
                     } else {
-                        System.out.println("✅ Turnos encontrados:");
-                        for (Turno t : encontrados) {
-                            System.out.println(t);
-                        }
+                        System.out.println("❌ No se encontró el turno, ya estaba finalizado o no fue atendido.");
                     }
                     break;
+
                 case 0:
                     System.out.println("👋 Saliendo del sistema... ¡Hasta luego!");
                     System.exit(0);

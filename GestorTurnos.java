@@ -26,10 +26,9 @@ public class GestorTurnos {
         return nuevoTurno;
     }
 
-    public Turno[] buscarTurnosPorDni(int dni) {
+    public void mostrarTurnosPorDni(int dni) {
         ConjuntoTDA claves = turnosPorId.Claves();
-        Turno[] posibles = new Turno[100];
-        int i = 0;
+        boolean encontrado = false;
 
         while (!claves.ConjuntoVacio()) {
             int id = claves.Elegir();
@@ -37,19 +36,15 @@ public class GestorTurnos {
             claves.Sacar(id);
 
             if (t.getDni() == dni) {
-                posibles[i++] = t;
+                System.out.println("🆔 ID: " + id + " → " + t);
+                encontrado = true;
             }
         }
 
-        Turno[] resultado = new Turno[i];
-        for (int j = 0; j < i; j++) {
-            resultado[j] = posibles[j];
+        if (!encontrado) {
+            System.out.println("❌ No se encontró ningún turno con ese DNI.");
         }
-
-        return resultado;
     }
-
-
 
     public Turno llamarSiguienteTurno() {
         if (colaPrioridad.ColaVacia()) {
@@ -79,4 +74,23 @@ public class GestorTurnos {
         }
         historialAtendidos.Mostrar();
     }
+    public boolean marcarTurnoComoFinalizado(int id) {
+        ConjuntoTDA claves = turnosPorId.Claves();
+
+        while (!claves.ConjuntoVacio()) {
+            int clave = claves.Elegir();
+            Turno t = turnosPorId.Recuperar(clave);
+            claves.Sacar(clave);
+
+            // Se debe cumplir: clave correcta, el turno existe, no finalizado y sí atendido
+            if (clave == id && t != null && !t.isFinalizado() && t.isAtendido()) {
+                t.marcarComoFinalizado();
+                return true;
+            }
+        }
+
+        return false; // No se encontró o no cumple condiciones
+    }
+
+
 }
