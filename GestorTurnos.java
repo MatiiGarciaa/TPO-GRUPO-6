@@ -3,8 +3,9 @@ package TPO;
 public class GestorTurnos {
     private final ColaPrioridadPU colaPrioridad;
     private final PilaPU historialAtendidos;
-    private int contadorTurnos;
-    private final DiccionarioSimplePU turnosPorDni;
+    public int contadorTurnos;
+    private final DiccionarioSimplePU turnosPorId;
+    private int idContador; // ID único por turno
 
     public GestorTurnos() {
         colaPrioridad = new ColaPrioridadPU();
@@ -12,22 +13,42 @@ public class GestorTurnos {
         historialAtendidos = new PilaPU();
         historialAtendidos.InicializarPila();
         contadorTurnos = 0;
-        turnosPorDni = new DiccionarioSimplePU();
-        turnosPorDni.InicializarDiccionario();
-
+        turnosPorId = new DiccionarioSimplePU();
+        turnosPorId.InicializarDiccionario();
+        idContador = 0;
     }
 
     public Turno asignarTurno(int dni, String nombre, String tramite, String fechaHora) {
         Turno nuevoTurno = new Turno(dni, nombre, tramite, fechaHora);
+        turnosPorId.Agregar(idContador, nuevoTurno); // Guardado con ID único
         colaPrioridad.AcolarPrioridad(nuevoTurno, nuevoTurno.getPrioridad());
-        turnosPorDni.Agregar(nuevoTurno.getDni(), nuevoTurno); // Ahora se guarda internamente
-        contadorTurnos++;
+        idContador++;
         return nuevoTurno;
     }
-    
-    public Turno buscarTurnoPorDni(int dni) {
-        return (Turno) turnosPorDni.Recuperar(dni); /*el casting no es necesario pero por las dudas xs*/
+
+    public Turno[] buscarTurnosPorDni(int dni) {
+        ConjuntoTDA claves = turnosPorId.Claves();
+        Turno[] posibles = new Turno[100];
+        int i = 0;
+
+        while (!claves.ConjuntoVacio()) {
+            int id = claves.Elegir();
+            Turno t = turnosPorId.Recuperar(id);
+            claves.Sacar(id);
+
+            if (t.getDni() == dni) {
+                posibles[i++] = t;
+            }
+        }
+
+        Turno[] resultado = new Turno[i];
+        for (int j = 0; j < i; j++) {
+            resultado[j] = posibles[j];
+        }
+
+        return resultado;
     }
+
 
 
     public Turno llamarSiguienteTurno() {
@@ -43,12 +64,19 @@ public class GestorTurnos {
         return siguiente;
     }
 
-    public Turno[] obtenerTurnosEnEspera() {
-        return colaPrioridad.verElementos();
+    public void mostrarTurnosEnEspera() {
+        if (colaPrioridad.ColaVacia()) {
+            System.out.println("📭 No hay turnos en espera.");
+            return;
+        }
+        colaPrioridad.Mostrar();
     }
 
-    public Turno[] obtenerHistorialAtendidos() {
-        return historialAtendidos.verElementos();
+    public void mostrarHistorialAtendidos() {
+        if (historialAtendidos.PilaVacia()) {
+            System.out.println("📭 Aún no se atendió ningún turno.");
+            return;
+        }
+        historialAtendidos.Mostrar();
     }
-
 }

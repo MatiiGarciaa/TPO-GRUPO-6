@@ -6,5 +6,5 @@ public interface PilaTDA {
     void Desapilar();
     Turno Tope();
     boolean PilaVacia();
-    void Mostrar();
+    void Mostrar ();
 }

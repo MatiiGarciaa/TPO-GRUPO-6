@@ -23,37 +23,6 @@ public class ColaPrioridadPU implements ColaPrioridadTDA {
         indice++;
     }
     
-    public int tamanio() {
-    	return indice;
-    }
-    //el indice tiene cuantos turnos se agrego osea el tamanio
-    
-    public Turno[] verElementos() {
-        Turno[] copia = new Turno[indice];
-        for (int i = 0; i < indice; i++) {
-            copia[i] = elementos[indice - 1 - i];
-        }
-        return copia;
-    }
-
-
-    public void Desacolar() {
-        if (!ColaVacia()) {
-            indice--;
-        }
-    }
-
-    public Turno Primero() {
-        return elementos[indice - 1];
-    }
-
-    public int Prioridad() {
-        return prioridades[indice - 1];
-    }
-
-    public boolean ColaVacia() {
-        return (indice == 0);
-    }
     public void Mostrar() {
         ColaPrioridadPU aux = new ColaPrioridadPU();
         aux.InicializarCola();
@@ -74,4 +43,21 @@ public class ColaPrioridadPU implements ColaPrioridadTDA {
         }
     }
 
+    public void Desacolar() {
+        if (!ColaVacia()) {
+            indice--;
+        }
+    }
+
+    public Turno Primero() {
+        return elementos[indice - 1];
+    }
+
+    public int Prioridad() {
+        return prioridades[indice - 1];
+    }
+
+    public boolean ColaVacia() {
+        return (indice == 0);
+    }
 }

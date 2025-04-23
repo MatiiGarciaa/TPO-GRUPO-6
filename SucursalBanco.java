@@ -20,4 +20,8 @@ public class SucursalBanco {
     public GestorTurnos getGestorTurnos() {
         return gestorTurnos;
     }
+    
+    public String getNombreSucursal() {
+        return this.nombreSucursal;
+    }
 }

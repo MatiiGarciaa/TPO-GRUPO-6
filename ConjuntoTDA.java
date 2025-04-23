@@ -8,3 +8,4 @@ public interface ConjuntoTDA {
     void Sacar(int x);          // pre: conjunto inicializado.
     boolean Pertenece(int x);   // pre: conjunto inicializado.
 }
+

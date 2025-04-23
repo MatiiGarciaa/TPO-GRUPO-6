@@ -8,12 +8,14 @@ public class MainTurnos {
     public static void main(String[] args) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         Scanner input = new Scanner(System.in);
-        SucursalBanco sucursal = SucursalBanco.getInstance("Banco Principal");
+        System.out.print("Ingrese el nombre de la sucursal: ");
+        String sucursalInput = input.nextLine();
+        SucursalBanco sucursal = SucursalBanco.getInstance(sucursalInput);
         GestorTurnos gestor = sucursal.getGestorTurnos();
 
         while (true) {
             System.out.println("\n=====================================");
-            System.out.println("     SISTEMA DE TURNOS BANCARIOS     ");
+            System.out.println("   BANCO UADE - SUCURSAL "+ sucursal.getNombreSucursal().toUpperCase());
             System.out.println("=====================================");
             System.out.println("  1️  Asignar nuevo turno");
             System.out.println("  2️  Llamar siguiente turno");
@@ -30,9 +32,26 @@ public class MainTurnos {
             switch (opcion) {
                 case 1:
                     System.out.println("\n📄 NUEVO TURNO");
-                    System.out.print("🪪 Ingrese DNI: ");
-                    int dni = input.nextInt();
-                    input.nextLine();
+                    int dni;
+                    while (true) {
+                        System.out.print("🪪 Ingrese DNI (7 u 8 dígitos): ");
+
+                        if (!input.hasNextInt()) {
+                            System.out.println("❌ Ingrese solo números.");
+                            input.nextLine(); 
+                            continue;
+                        }
+
+                        dni = input.nextInt();
+                        input.nextLine(); 
+
+                        if (dni < 1_000_000 || dni > 99_999_999) {
+                            System.out.println("❌ El DNI debe tener 7 u 8 dígitos.");
+                            continue;
+                        }
+
+                        break; 
+                    }
 
                     System.out.print("🧑 Ingrese nombre: ");
                     String nombre = input.nextLine();
@@ -77,42 +96,30 @@ public class MainTurnos {
 
                 case 3:
                     System.out.println("\n🕒 TURNOS EN ESPERA:");
-                    Turno[] enEspera = gestor.obtenerTurnosEnEspera();
-                    if (enEspera.length == 0) {
-                        System.out.println("📭 No hay turnos en espera.");
-                    } else {
-                        for (Turno t : enEspera) {
-                            System.out.println(t);
-                        }
-                    }
+                    gestor.mostrarTurnosEnEspera();
                     break;
 
                 case 4:
                     System.out.println("\n📚 HISTORIAL DE ATENDIDOS:");
-                    Turno[] historial = gestor.obtenerHistorialAtendidos();
-                    if (historial.length == 0) {
-                        System.out.println("📭 Aún no se atendió ningún turno.");
+                    gestor.mostrarHistorialAtendidos();
+                    break;
+
+                case 5:
+                	System.out.print("🔍 Ingrese DNI para buscar: ");
+                    int dniBuscar = input.nextInt();
+                    input.nextLine();
+
+                    Turno[] encontrados = gestor.buscarTurnosPorDni(dniBuscar);
+
+                    if (encontrados.length == 0) {
+                        System.out.println("❌ No se encontró ningún turno con ese DNI.");
                     } else {
-                        for (Turno t : historial) {
+                        System.out.println("✅ Turnos encontrados:");
+                        for (Turno t : encontrados) {
                             System.out.println(t);
                         }
                     }
                     break;
-
-                case 5:
-                    System.out.print("🔍 Ingrese DNI para buscar: ");
-                    int dniBuscar = input.nextInt();
-                    input.nextLine();
-
-                    Turno encontrado = gestor.buscarTurnoPorDni(dniBuscar);
-                    if (encontrado != null) {
-                        System.out.println("✅ Turno encontrado:");
-                        System.out.println(encontrado);
-                    } else {
-                        System.out.println("❌ No se encontró ningún turno con ese DNI");
-                    }
-                    break;
-
                 case 0:
                     System.out.println("👋 Saliendo del sistema... ¡Hasta luego!");
                     System.exit(0);
