@@ -7,5 +7,6 @@ public interface ColaPrioridadTDA {
     Turno Primero();
     int Prioridad();
     boolean ColaVacia();
+    void Mostrar();
 }
 
