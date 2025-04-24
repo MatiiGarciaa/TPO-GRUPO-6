@@ -24,10 +24,10 @@ public class Turno {
     private int calcularPrioridad(String tramite) {
         tramite = tramite.toLowerCase();
         if (tramite.contains("apertura de cuenta")) {
-            return 1; // Mayor prioridad
+            return 3; // Mayor prioridad
         }
         if (tramite.contains("pago de servicios")) {
-            return 3; // Menor prioridad
+            return 1; // Menor prioridad
         }
         return 2; // Prioridad media
     }
