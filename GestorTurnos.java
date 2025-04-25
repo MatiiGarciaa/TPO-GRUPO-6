@@ -58,13 +58,51 @@ public class GestorTurnos {
         
         return siguiente;
     }
+ public void MostrarCola(ColaPrioridadPU cola) {
+        ColaPrioridadPU aux = new ColaPrioridadPU();
+        aux.InicializarCola();
+
+        while (!cola.ColaVacia()) {
+            Turno t = cola.Primero();
+            int p = cola.Prioridad();
+            System.out.println(t);
+            aux.AcolarPrioridad(t, p);
+            cola.Desacolar();
+        }
+
+        while (!aux.ColaVacia()) {
+            Turno t = aux.Primero();
+            int p = aux.Prioridad();
+            cola.AcolarPrioridad(t, p);
+            aux.Desacolar();
+        }
+    }
+
 
     public void mostrarTurnosEnEspera() {
         if (colaPrioridad.ColaVacia()) {
             System.out.println("📭 No hay turnos en espera.");
             return;
         }
-        colaPrioridad.Mostrar();
+        MostrarCola(this.colaPrioridad);
+    }
+    
+    public void MostrarPila(PilaPU pila) {
+        PilaPU aux = new PilaPU();
+        aux.InicializarPila();
+
+        while (!pila.PilaVacia()) {
+            Turno t = pila.Tope();
+            System.out.println(t);
+            aux.Apilar(t);
+            pila.Desapilar();
+        }
+
+        while (!aux.PilaVacia()) {
+            Turno t = aux.Tope();
+            pila.Apilar(t);
+            aux.Desapilar();
+        }
     }
 
     public void mostrarHistorialAtendidos() {
@@ -72,7 +110,7 @@ public class GestorTurnos {
             System.out.println("📭 Aún no se atendió ningún turno.");
             return;
         }
-        historialAtendidos.Mostrar();
+        MostrarPila(this.historialAtendidos);
     }
     public boolean marcarTurnoComoFinalizado(int id) {
         ConjuntoTDA claves = turnosPorId.Claves();
