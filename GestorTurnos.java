@@ -19,12 +19,28 @@ public class GestorTurnos {
     }
 
     public Turno asignarTurno(int dni, String nombre, String tramite, String fechaHora) {
+        ConjuntoTDA claves = turnosPorId.Claves();
+
+        while (!claves.ConjuntoVacio()) {
+            int id = claves.Elegir();
+            Turno turnoExistente = turnosPorId.Recuperar(id);
+            claves.Sacar(id);
+
+            if (turnoExistente.getDni() == dni) {
+                if (!turnoExistente.getNombreCliente().equalsIgnoreCase(nombre)) {
+                    System.out.println("❌ Error: Ya existe un turno para este DNI pero con otro nombre registrado.");
+                    return null; 
+                }
+            }
+        }
+
         Turno nuevoTurno = new Turno(dni, nombre, tramite, fechaHora);
         turnosPorId.Agregar(idContador, nuevoTurno); // Guardado con ID único
         colaPrioridad.AcolarPrioridad(nuevoTurno, nuevoTurno.getPrioridad());
         idContador++;
         return nuevoTurno;
     }
+
 
     public void mostrarTurnosPorDni(int dni) {
         ConjuntoTDA claves = turnosPorId.Claves();
@@ -75,7 +91,7 @@ public class GestorTurnos {
             Turno t = turnosPorId.Recuperar(id);
             claves.Sacar(id);
 
-            if (t.equals(turnoBuscado)) {
+            if (t.equals(turnoBuscado)) { // Comparación por referencia (mismo objeto)
                 return id;
             }
         }
@@ -112,14 +128,52 @@ public class GestorTurnos {
         return false;
     }
     
-    public boolean marcarTurnoComoAtendido(int id) {
+    public boolean eliminarTurno(int id) {
         Turno turno = turnosPorId.Recuperar(id);
 
-        if (turno != null && !turno.isAtendido()) {
-            turno.marcarComoAtendido();
+        if (turno != null) {
+            // 1. Eliminar del diccionario
+            turnosPorId.Eliminar(id);
 
-            turnosPorId.Eliminar(id);    // Elimino del diccionario
-            turnosPorId.Agregar(id, turno); // Lo vuelvo a agregar actualizado
+            // 2. Eliminar de la cola de prioridad
+            ColaPrioridadPU aux = new ColaPrioridadPU();
+            aux.InicializarCola();
+
+            while (!colaPrioridad.ColaVacia()) {
+                Turno t = colaPrioridad.Primero();
+                int prioridad = colaPrioridad.Prioridad();
+                colaPrioridad.Desacolar();
+
+                if (!t.equals(turno)) {
+                    aux.AcolarPrioridad(t, prioridad);
+                }
+            }
+
+            while (!aux.ColaVacia()) {
+                Turno t = aux.Primero();
+                int prioridad = aux.Prioridad();
+                aux.Desacolar();
+                colaPrioridad.AcolarPrioridad(t, prioridad);
+            }
+
+            // 3. Eliminar de la pila del historial si ya fue atendido
+            PilaPU auxHistorial = new PilaPU();
+            auxHistorial.InicializarPila();
+
+            while (!historialAtendidos.PilaVacia()) {
+                Turno t = historialAtendidos.Tope();
+                historialAtendidos.Desapilar();
+
+                if (!t.equals(turno)) {
+                    auxHistorial.Apilar(t);
+                }
+            }
+
+            while (!auxHistorial.PilaVacia()) {
+                Turno t = auxHistorial.Tope();
+                auxHistorial.Desapilar();
+                historialAtendidos.Apilar(t);
+            }
 
             return true;
         }

@@ -23,6 +23,7 @@ public class MainTurnos {
             System.out.println("  4  Ver historial de atendidos");
             System.out.println("  5  Buscar turno por DNI");
             System.out.println("  6  Marcar como finalizado");
+            System.out.println("  7  Eliminar turno del sistema");
             System.out.println("  0️  Salir");
             System.out.println("=====================================");
             System.out.print("Seleccione una opción ▶️: ");
@@ -58,19 +59,19 @@ public class MainTurnos {
                     String nombre = input.nextLine();
 
                     System.out.println("\n📌 Tipo de trámite:");
-                    System.out.println("  1️ Pago de serviciosa");
+                    System.out.println("  1️ Apertura de cuenta");
                     System.out.println("  2️ Otro trámite");
-                    System.out.println("  3️ Apertura de cuenta");
+                    System.out.println("  3️ Pago de servicios");
                     System.out.print("Seleccione el número del trámite ▶️: ");
                     int opcionTramite = input.nextInt();
                     input.nextLine();
 
                     String tramite;
                     switch (opcionTramite) {
-                        case 3:
+                        case 1:
                             tramite = "apertura de cuenta";
                             break;
-                        case 1:
+                        case 3:
                             tramite = "pago de servicios";
                             break;
                         default:
@@ -124,7 +125,16 @@ public class MainTurnos {
                         System.out.println("❌ No se encontró el turno, ya estaba finalizado o no fue atendido.");
                     }
                     break;
-
+                case 7:
+                	System.out.print("🗑️ Ingrese ID del turno a eliminar: ");
+                	int idEliminar = input.nextInt();
+                	input.nextLine();
+                	if (gestor.eliminarTurno(idEliminar)) {
+                	    System.out.println("✅ Turno eliminado exitosamente.");
+                	} else {
+                	    System.out.println("❌ No se encontró el turno.");
+                	}
+                	break;
                 case 0:
                     System.out.println("👋 Saliendo del sistema... ¡Hasta luego!");
                     System.exit(0);
