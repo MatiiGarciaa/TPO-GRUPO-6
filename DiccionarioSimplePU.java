@@ -15,13 +15,13 @@ public class DiccionarioSimplePU implements DiccionarioSimpleTDA {
     }
 
     public void Agregar(int clave, Turno valor) {
-        Nodo actual = origen;
-        while (actual != null && actual.clave != clave) {
-            actual = actual.siguiente;
+        Nodo aux = origen;
+        while (aux != null && aux.clave != clave) {
+            aux = aux.siguiente;
         }
 
-        if (actual != null) {
-            actual.valor = valor; // Piso el valor si la clave ya existe
+        if (aux != null) {
+            aux.valor = valor; // Piso el valor si la clave ya existe
         } else {
             Nodo nuevo = new Nodo();
             nuevo.clave = clave;
@@ -39,23 +39,23 @@ public class DiccionarioSimplePU implements DiccionarioSimpleTDA {
         if (origen.clave == clave) {
             origen = origen.siguiente;
         } else {
-            Nodo actual = origen;
-            while (actual.siguiente != null && actual.siguiente.clave != clave) {
-                actual = actual.siguiente;
+            Nodo aux = origen;
+            while (aux.siguiente != null && aux.siguiente.clave != clave) {
+                aux = aux.siguiente;
             }
-            if (actual.siguiente != null) {
-                actual.siguiente = actual.siguiente.siguiente;
+            if (aux.siguiente != null) {
+                aux.siguiente = aux.siguiente.siguiente;
             }
         }
     }
 
     public Turno Recuperar(int clave) {
-        Nodo actual = origen;
-        while (actual != null) {
-            if (actual.clave == clave) {
-                return actual.valor;
+        Nodo aux = origen;
+        while (aux != null) {
+            if (aux.clave == clave) {
+                return aux.valor;
             }
-            actual = actual.siguiente;
+            aux = aux.siguiente;
         }
         return null; // No encontrado
     }
@@ -64,10 +64,10 @@ public class DiccionarioSimplePU implements DiccionarioSimpleTDA {
     public ConjuntoTDA Claves() {
         ConjuntoTDA c = new ConjuntoPU();
         c.InicializarConjunto();
-        Nodo actual = origen;
-        while (actual != null) {
-            c.Agregar(actual.clave);
-            actual = actual.siguiente;
+        Nodo aux = origen;
+        while (aux != null) {
+            c.Agregar(aux.clave);
+            aux = aux.siguiente;
         }
         return c;
     }
