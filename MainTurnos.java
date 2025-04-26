@@ -21,7 +21,7 @@ public class MainTurnos {
             System.out.println("  2️  Llamar siguiente turno");
             System.out.println("  3  Ver turnos en espera");
             System.out.println("  4  Ver historial de atendidos");
-            System.out.println("  5  Buscar turno por DNI");
+            System.out.println("  5  Buscar turnos por DNI");
             System.out.println("  6  Marcar como finalizado");
             System.out.println("  7  Eliminar turno del sistema");
             System.out.println("  0️  Salir");
@@ -55,27 +55,46 @@ public class MainTurnos {
                         break; 
                     }
 
-                    System.out.print("🧑 Ingrese nombre: ");
-                    String nombre = input.nextLine();
+                    String nombre;
+                    while (true) {
+                        System.out.print("🧑 Ingrese nombre: ");
+                        nombre = input.nextLine().trim(); // Elimina espacios al inicio y al final
+
+                        if (nombre.isEmpty()) {
+                            System.out.println("❌ El nombre no puede estar vacío. Intente nuevamente.");
+                            continue;
+                        }
+
+                        // Validar que solo tenga letras y espacios
+                        if (!nombre.matches("[a-zA-Z\\s]+")) {
+                            System.out.println("❌ El nombre solo puede contener letras y espacios. Intente nuevamente.");
+                            continue;
+                        }
+
+                        break; // Salimos si pasa todas las validaciones
+                    }
 
                     System.out.println("\n📌 Tipo de trámite:");
-                    System.out.println("  1️ Pago de servicios");
-                    System.out.println("  2️ Otro trámite");
-                    System.out.println("  3️ Apertura de cuenta");
+                    System.out.println("  1️ Apertura de cuenta");
+                    System.out.println("  2️ Consulta");
+                    System.out.println("  3️ Pago de servicios");
                     System.out.print("Seleccione el número del trámite ▶️: ");
                     int opcionTramite = input.nextInt();
                     input.nextLine();
 
-                    String tramite;
+                    String tramite = null;
                     switch (opcionTramite) {
-                        case 3:
+                        case 1:
                             tramite = "apertura de cuenta";
                             break;
-                        case 1:
+                        case 2:
+                            tramite = "consulta";
+                            break;   
+                        case 3:
                             tramite = "pago de servicios";
                             break;
                         default:
-                            tramite = "otro trámite";
+                        	System.out.println("❗ Opción no válida. Intente nuevamente.");
                     }
 
                     String fechaHora = LocalDateTime.now().format(formato);
