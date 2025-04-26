@@ -75,7 +75,7 @@ public class GestorTurnos {
             Turno t = turnosPorId.Recuperar(id);
             claves.Sacar(id);
 
-            if (t == turnoBuscado) { // Comparación por referencia (mismo objeto)
+            if (t.equals(turnoBuscado)) {
                 return id;
             }
         }
