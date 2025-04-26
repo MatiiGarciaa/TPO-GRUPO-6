@@ -1,55 +1,75 @@
 package TPO;
 
 public class DiccionarioSimplePU implements DiccionarioSimpleTDA {
-	private Elemento[] elementos;
-    private int cant;
+    
+    private class Nodo {
+        int clave;
+        Turno valor;
+        Nodo siguiente;
+    }
 
+    private Nodo origen;
+	
     public void InicializarDiccionario() {
-        elementos = new Elemento[100];
-        cant = 0;
+        origen = null;
     }
 
     public void Agregar(int clave, Turno valor) {
-        int pos = Clave2Ind(clave);
-        if (pos == -1) {
-            pos = cant;
-            elementos[pos] = new Elemento();
-            elementos[pos].clave = clave;
-            cant++;
+        Nodo actual = origen;
+        while (actual != null && actual.clave != clave) {
+            actual = actual.siguiente;
         }
-        elementos[pos].valor = valor;
+
+        if (actual != null) {
+            actual.valor = valor; // Piso el valor si la clave ya existe
+        } else {
+            Nodo nuevo = new Nodo();
+            nuevo.clave = clave;
+            nuevo.valor = valor;
+            nuevo.siguiente = origen;
+            origen = nuevo;
+        }
     }
 
     public void Eliminar(int clave) {
-        int pos = Clave2Ind(clave);
-        if (pos != -1) {
-            elementos[pos] = elementos[cant - 1];
-            cant--;
+        if (origen == null) {
+            return;
+        }
+
+        if (origen.clave == clave) {
+            origen = origen.siguiente;
+        } else {
+            Nodo actual = origen;
+            while (actual.siguiente != null && actual.siguiente.clave != clave) {
+                actual = actual.siguiente;
+            }
+            if (actual.siguiente != null) {
+                actual.siguiente = actual.siguiente.siguiente;
+            }
         }
     }
 
     public Turno Recuperar(int clave) {
-        int pos = Clave2Ind(clave);
-        if (pos != -1) {
-            return elementos[pos].valor;
+        Nodo actual = origen;
+        while (actual != null) {
+            if (actual.clave == clave) {
+                return actual.valor;
+            }
+            actual = actual.siguiente;
         }
-        return null; // Por si la clave no está
+        return null; // No encontrado
     }
 
+    @Override
     public ConjuntoTDA Claves() {
         ConjuntoTDA c = new ConjuntoPU();
         c.InicializarConjunto();
-        for (int i = 0; i < cant; i++) {
-            c.Agregar(elementos[i].clave);
+        Nodo actual = origen;
+        while (actual != null) {
+            c.Agregar(actual.clave);
+            actual = actual.siguiente;
         }
         return c;
     }
-
-    private int Clave2Ind(int clave) {
-        int i = cant - 1;
-        while (i >= 0 && elementos[i].clave != clave) {
-            i--;
-        }
-        return i;
-    }
 }
+
