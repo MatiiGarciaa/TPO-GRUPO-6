@@ -50,21 +50,47 @@ public class GestorTurnos {
         if (colaPrioridad.ColaVacia()) {
             return null;
         }
-        
+
         Turno siguiente = colaPrioridad.Primero();
-        siguiente.marcarComoAtendido();
         colaPrioridad.Desacolar();
+
+        int idTurno = obtenerIdDelTurno(siguiente);
+
+        if (idTurno != -1) {
+            siguiente.marcarComoAtendido();   // Modificamos el turno
+            turnosPorId.Eliminar(idTurno);     // Eliminamos del diccionario
+            turnosPorId.Agregar(idTurno, siguiente); // Volvemos a agregarlo actualizado
+        }
+
         historialAtendidos.Apilar(siguiente);
-        
+
         return siguiente;
     }
-    public void mostrarTurnosEnEspera() {
-         if (colaPrioridad.ColaVacia()) {
-             System.out.println("📭 No hay turnos en espera.");
-             return;
-         }
-         colaPrioridad.Mostrar();
+    
+    private int obtenerIdDelTurno(Turno turnoBuscado) {
+        ConjuntoTDA claves = turnosPorId.Claves();
+
+        while (!claves.ConjuntoVacio()) {
+            int id = claves.Elegir();
+            Turno t = turnosPorId.Recuperar(id);
+            claves.Sacar(id);
+
+            if (t == turnoBuscado) { // Comparación por referencia (mismo objeto)
+                return id;
+            }
+        }
+        return -1; // No encontrado
     }
+
+
+    public void mostrarTurnosEnEspera() {
+        if (colaPrioridad.ColaVacia()) {
+            System.out.println("📭 No hay turnos en espera.");
+            return;
+        }
+        colaPrioridad.Mostrar();
+    }
+
     public void mostrarHistorialAtendidos() {
         if (historialAtendidos.PilaVacia()) {
             System.out.println("📭 Aún no se atendió ningún turno.");
@@ -73,20 +99,30 @@ public class GestorTurnos {
         historialAtendidos.Mostrar();
     }
     public boolean marcarTurnoComoFinalizado(int id) {
-        ConjuntoTDA claves = turnosPorId.Claves();
+        Turno turno = turnosPorId.Recuperar(id);
 
-        while (!claves.ConjuntoVacio()) {
-            int clave = claves.Elegir();
-            Turno t = turnosPorId.Recuperar(clave);
-            claves.Sacar(clave);
+        if (turno != null && turno.isAtendido() && !turno.isFinalizado()) {
+            turno.marcarComoFinalizado();
 
-            // Se debe cumplir: clave correcta, el turno existe, no finalizado y sí atendido
-            if (clave == id && t != null && !t.isFinalizado() && t.isAtendido()) {
-                t.marcarComoFinalizado();
-                return true;
-            }
+            turnosPorId.Eliminar(id);    // Elimino del diccionario
+            turnosPorId.Agregar(id, turno); // Lo vuelvo a agregar actualizado
+
+            return true;
         }
+        return false;
+    }
+    
+    public boolean marcarTurnoComoAtendido(int id) {
+        Turno turno = turnosPorId.Recuperar(id);
 
-        return false; // No se encontró o no cumple condiciones
+        if (turno != null && !turno.isAtendido()) {
+            turno.marcarComoAtendido();
+
+            turnosPorId.Eliminar(id);    // Elimino del diccionario
+            turnosPorId.Agregar(id, turno); // Lo vuelvo a agregar actualizado
+
+            return true;
+        }
+        return false;
     }
 }
