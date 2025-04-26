@@ -59,19 +59,19 @@ public class MainTurnos {
                     String nombre = input.nextLine();
 
                     System.out.println("\n📌 Tipo de trámite:");
-                    System.out.println("  1️ Apertura de cuenta");
+                    System.out.println("  1️ Pago de servicios");
                     System.out.println("  2️ Otro trámite");
-                    System.out.println("  3️ Pago de servicios");
+                    System.out.println("  3️ Apertura de cuenta");
                     System.out.print("Seleccione el número del trámite ▶️: ");
                     int opcionTramite = input.nextInt();
                     input.nextLine();
 
                     String tramite;
                     switch (opcionTramite) {
-                        case 1:
+                        case 3:
                             tramite = "apertura de cuenta";
                             break;
-                        case 3:
+                        case 1:
                             tramite = "pago de servicios";
                             break;
                         default:
